@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo hello olleh
+chown hello olleh
