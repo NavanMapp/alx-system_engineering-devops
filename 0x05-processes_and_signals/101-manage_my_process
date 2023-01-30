@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# This script manages 'manage_my_process'
+
+#!/usr/bin/env bash
+# Manages 'manage_my_process'
+
+if [S# -gt 0]
+then
+    if ["$1" == "start"]
+    then
