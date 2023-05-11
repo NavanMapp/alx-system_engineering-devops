@@ -1,7 +1,10 @@
 
 0x16. API advanced
+
 ![image](https://github.com/NavanMapp/alx-system_engineering-devops/assets/95779113/99c8e113-4141-4f16-bacb-471fd42a37df)
+
 Learning Objectives
+
 How to read API documentation to find the endpoints you’re looking for
 How to use an API with pagination
 How to parse JSON results from an API
@@ -20,6 +23,8 @@ All your files must be executable
 The length of your files will be tested using wc
 All your modules should have a documentation (python3 -c 'print(__import__("my_module").__doc__)')
 You must use the Requests module for sending HTTP requests to the Reddit API
+
+
 TASKS
 0. How many subs?
 Write a function that queries the Reddit API and returns the number of subscribers (not active users, total subscribers) for a given subreddit. If an invalid subreddit is given, the function should return 0.
@@ -45,6 +50,8 @@ wintermancer@lapbox ~/reddit_api/project $ python3 0-main.py programming
 756024
 wintermancer@lapbox ~/reddit_api/project $ python3 0-main.py this_is_a_fake_subreddit
 0
+
+
 1. Top Ten
 Write a function that queries the Reddit API and prints the titles of the first 10 hot posts listed for a given subreddit.
 
@@ -77,6 +84,9 @@ PyCon 2017 Talk Videos
 wintermancer@lapbox ~/reddit_api/project $ python3 1-main.py this_is_a_fake_subreddit
 None
 wintermancer@lapbox ~/reddit_api/project $
+
+
+
 2. Recurse it!
 Write a recursive function that queries the Reddit API and returns a list containing the titles of all hot articles for a given subreddit. If no results are found for the given subreddit, the function should return None.
 
@@ -106,6 +116,9 @@ wintermancer@lapbox ~/reddit_api/project $ python3 2-main.py programming
 932
 wintermancer@lapbox ~/reddit_api/project $ python3 2-main.py this_is_a_fake_subreddit
 None
+
+
+
 3. Count it!
 Write a recursive function that queries the Reddit API, parses the title of all hot articles, and prints a sorted count of given keywords (case-insensitive, delimited by spaces. Javascript should count as javascript, but java should not).
 
