@@ -7,13 +7,13 @@ import requests
 def number_of_subscribers(subreddit):
     headers = {'User-Agent': 'CustomUserAgent'}
 
-    # Construct the API URL for the subreddit's information
+    # API URL 
     url = f'https://www.reddit.com/r/{subreddit}/about.json'
 
     # API request
     response = requests.get(url, headers=headers, allow_redirects=False)
 
-    # Check if the request was successful and the status code is 200 (OK)
+    # Check if the request was successful
     if response.status_code == 200:
         try:
             data = response.json()
