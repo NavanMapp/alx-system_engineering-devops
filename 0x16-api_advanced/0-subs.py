@@ -2,25 +2,26 @@
 """A function that queries the Reddit API and returns the number of
 subscribers (not active users, total subscribers) for a given subreddit"""
 
-from requests import get
-
+import requests
 
 def number_of_subscribers(subreddit):
-    """
-    function that queries the Reddit API and returns the number of subscribers
-    (not active users, total subscribers) for a given subreddit.
-    """
+    headers = {'User-Agent': 'CustomUserAgent'}
 
-    if subreddit is None or not isinstance(subreddit, str):
+    # Construct the API URL for the subreddit's information
+    url = f'https://www.reddit.com/r/{subreddit}/about.json'
+
+    # API request
+    response = requests.get(url, headers=headers, allow_redirects=False)
+
+    # Check if the request was successful and the status code is 200 (OK)
+    if response.status_code == 200:
+        try:
+            data = response.json()
+            subscribers = data['data']['subscribers']
+            return subscribers
+        except KeyError:
+            return 0
+    elif response.status_code == 302:
         return 0
-
-    user_agent = {'User-agent': 'Google Chrome Version 81.0.4044.129'}
-    url = 'https://www.reddit.com/r/{}/about.json'.format(subreddit)
-    response = get(url, headers=user_agent)
-    results = response.json()
-
-    try:
-        return results.get('data').get('subscribers')
-
-    except Exception:
+    else:
         return 0

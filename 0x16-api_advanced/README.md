@@ -1,8 +1,6 @@
 
 0x16. API advanced
 
-![image](https://github.com/NavanMapp/alx-system_engineering-devops/assets/95779113/99c8e113-4141-4f16-bacb-471fd42a37df)
-
 Learning Objectives
 
 How to read API documentation to find the endpoints you’re looking for
@@ -131,7 +129,7 @@ Results are based on the number of times a keyword appears, not titles it appear
 To make life easier, ‘java.’ or ‘java!’ or ‘java_’ should not count as ‘java’
 If no posts match or the subreddit is invalid, print a newline.
 NOTE: Invalid subreddits may return a redirect to search results. Ensure that you are NOT following redirects. Your code will NOT pass if you are using a loop and not recursively calling the function! This /can/ be done with a loop but the point is to use a recursive function. :)
-wintermancer@lapbox ~/reddit_api/project $ cat 100-main.py 
+wintermancer@lapbox ~/reddit_api/project $ cat 100-main.py
 #!/usr/bin/python3
 import sys
 
