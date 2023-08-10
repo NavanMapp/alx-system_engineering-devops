@@ -3,45 +3,51 @@
 and prints a sorted count of given keywords (case-insensitive, delimited by spaces.
 Javascript should count as javascript, but java should not)."""
 
-import praw
+import requests
 
-def count_words(subreddit, word_list, reddit=None):
-    if reddit is None:
-        reddit = praw.Reddit(
-            client_id='YOUR_CLIENT_ID',
-            client_secret='YOUR_CLIENT_SECRET',
-            user_agent='YOUR_USER_AGENT'
-        )
+def count_words(subreddit, word_list, after=None, word_counts=None):
+    if word_counts is None:
+        word_counts = {}
 
-    if not word_list:
-        return
+    headers = {'User-Agent': 'CustomUserAgent'}
 
-    if not subreddit:
-        print("Invalid subreddit")
-        return
+    # API URL
+    url = f'https://www.reddit.com/r/{subreddit}/hot.json?limit=100'
 
-    subreddit_obj = reddit.subreddit(subreddit)
-    hot_articles = subreddit_obj.hot(limit=10)
+    if after:
+        url += f'&after={after}'
 
-    word_counts = {}
+    # API request
+    response = requests.get(url, headers=headers, allow_redirects=False)
 
-    for submission in hot_articles:
-        title = submission.title.lower()
-        for word in word_list:
-            word_lower = word.lower()
-            if word_lower in title:
-                if word_lower in word_counts:
-                    word_counts[word_lower] += 1
-                else:
-                    word_counts[word_lower] = 1
+    # Check if the request was successful
+    if response.status_code == 200:
+        try:
+            data = response.json()
+            posts = data['data']['children']
 
-    sorted_word_counts = sorted(word_counts.items(), key=lambda x: (-x[1], x[0]))
+            if not posts:
+                sorted_word_counts = sorted(word_counts.items(), key=lambda x: (-x[1], x[0]))
+                for word, count in sorted_word_counts:
+                    print(f"{word}: {count}")
+                return
 
-    for word, count in sorted_word_counts:
-        print(f"{word}: {count}")
+            for post in posts:
+                title = post['data']['title']
+                title_words = title.lower().split()
 
-    print("----------------------")
+                for word in word_list:
+                    if word in title_words:
+                        if word in word_counts:
+                            word_counts[word] += title_words.count(word)
+                        else:
+                            word_counts[word] = title_words.count(word)
 
-    count_words(subreddit, word_list[1:], reddit)
-
-count_words("programming", ["java", "Python", "javascript", "ruby"])
+            after = data['data']['after']
+            return count_words(subreddit, word_list, after, word_counts)
+        except KeyError:
+            return None
+    elif response.status_code == 302:
+        return None
+    else:
+        return None
