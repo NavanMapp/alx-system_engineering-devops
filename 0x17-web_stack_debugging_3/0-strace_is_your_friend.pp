@@ -4,11 +4,13 @@
 # as you were previously doing).
 
 # Define an Exec resource to fix the issue (replace with actual commands)
-exec { 'fix-error':
-  command     => '/path/to/fix/script.sh',
-  refreshonly => true,
+file { '/path/to/apache/error.log':
+  owner   => 'www-data',
+  group   => 'www-data',
+  mode    => '0644',
+  require => Package['apache2'], # Ensure Apache is installed before applying this change
 }
 
 service { 'apache2':
-  ensure => running,
+  ensure => 'running',
 }
