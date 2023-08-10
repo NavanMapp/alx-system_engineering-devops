@@ -5,49 +5,33 @@ Javascript should count as javascript, but java should not)."""
 
 import requests
 
-def count_words(subreddit, word_list, after=None, word_counts=None):
-    if word_counts is None:
-        word_counts = {}
+def count_words(subreddit, word_list, after=None, word_count=None):
+    if word_count is None:
+        word_count = {}
 
-    headers = {'User-Agent': 'CustomUserAgent'}
-
-    # API URL
-    url = f'https://www.reddit.com/r/{subreddit}/hot.json?limit=100'
-
-    if after:
-        url += f'&after={after}'
-
-    # API request
-    response = requests.get(url, headers=headers, allow_redirects=False)
-
-    # Check if the request was successful
-    if response.status_code == 200:
-        try:
-            data = response.json()
-            posts = data['data']['children']
-
-            if not posts:
-                sorted_word_counts = sorted(word_counts.items(), key=lambda x: (-x[1], x[0]))
-                for word, count in sorted_word_counts:
-                    print(f"{word}: {count}")
-                return
-
-            for post in posts:
-                title = post['data']['title']
-                title_words = title.lower().split()
-
-                for word in word_list:
-                    if word in title_words:
-                        if word in word_counts:
-                            word_counts[word] += title_words.count(word)
-                        else:
-                            word_counts[word] = title_words.count(word)
-
-            after = data['data']['after']
-            return count_words(subreddit, word_list, after, word_counts)
-        except KeyError:
-            return None
-    elif response.status_code == 302:
-        return None
+    if after is None:
+        response = requests.get(f'https://www.reddit.com/r/{subreddit}/hot.json', headers={'User-agent': 'Mozilla/5.0'}).json()
     else:
-        return None
+        response = requests.get(f'https://www.reddit.com/r/{subreddit}/hot.json?after={after}', headers={'User-agent': 'Mozilla/5.0'}).json()
+
+    if 'data' in response and 'children' in response['data']:
+        for post in response['data']['children']:
+            title = post['data']['title'].lower()
+            for word in word_list:
+                if word in word_count:
+                    word_count[word] += title.count(word)
+                else:
+                    word_count[word] = title.count(word)
+
+        if 'after' in response['data'] and response['data']['after'] is not None:
+            count_words(subreddit, word_list, response['data']['after'], word_count)
+        else:
+            sorted_counts = sorted(word_count.items(), key=lambda x: (-x[1], x[0]))
+            for word, count in sorted_counts:
+                if count > 0:
+                    print(f"{word}: {count}")
+
+subreddit_name = "programming"
+keywords = ["javascript", "python", "java"]
+
+count_words(subreddit_name, keywords)
