@@ -1,0 +1,7 @@
+#!/bin/bash
+
+sudo apt update
+sudo apt install nginx -y
+sudo ufw allow 80/tcp
+sudo systemctl restart nginx
+sudo systemctl is-active --quiet nginx || echo "Nginx is not running"
