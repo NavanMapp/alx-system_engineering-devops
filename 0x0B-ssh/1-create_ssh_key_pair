@@ -1,3 +1,18 @@
 #!/usr/bin/env bash
-# Creates a new 4096-byte RSA key pair named holberton.
-ssh-keygen -t rsa -b 4096 -P betty -f school
+# Create an RSA key pair with a passphrase
+
+# Key name
+KEY_NAME="school"
+
+# Number of bits
+BITS=4096
+
+# Passphrase
+PASSPHRASE="betty"
+
+# Generate the key pair
+ssh-keygen -b $BITS -t rsa -f $KEY_NAME -N "$PASSPHRASE"
+
+echo "RSA key pair created:"
+echo "Private key: $KEY_NAME"
+echo "Public key: ${KEY_NAME}.pub"
