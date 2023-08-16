@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Get the Gunicorn process IDs
+gunicorn_pids=$(pgrep gunicorn)
+
+# Output the current Gunicorn processes
+echo "Current Gunicorn Processes:"
+ps auxf | grep gunicorn
+
+# Iterate through each Gunicorn process and gracefully reload it
+for pid in $gunicorn_pids; do
+    echo "Reloading Gunicorn process with PID $pid..."
+    kill -HUP $pid
+done
+
+# Wait for a short time to allow the reload to take effect
+sleep 2
+
+# Output the updated Gunicorn processes
+echo "Updated Gunicorn Processes:"
+ps auxf | grep gunicorn
+
+echo "Gunicorn Reload Complete"
