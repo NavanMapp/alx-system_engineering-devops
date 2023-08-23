@@ -1,7 +1,6 @@
 #!/bin/bash
 
-sudo apt update
-sudo apt install nginx -y
-sudo ufw allow 80/tcp
-sudo systemctl restart nginx
-sudo systemctl is-active --quiet nginx || echo "Nginx is not running"
+apt-get update
+apt-get install -y nginx
+sed -i 's/listen\s*80;/listen 80 default_server;/g' /etc/nginx/sites-available/default
+service nginx restart

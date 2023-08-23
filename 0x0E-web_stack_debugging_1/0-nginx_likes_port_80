@@ -1,22 +1,13 @@
 #!/bin/bash
 
-# Update system
-sudo apt update
-sudo apt upgrade -y
-
-# Install necessary tools
-sudo apt install nginx net-tools -y
-
-# Check if port 80 is already in use
-if sudo netstat -tuln | grep ':80'; then
-    echo "Port 80 is already in use"
-    exit 1
+# Install Nginx if not already installed
+if ! command -v nginx &>/dev/null; then
+    apt-get update
+    apt-get install -y nginx
 fi
-sudo ufw allow 80/tcp
 
-# Check if Nginx is listening on port 80
-if sudo netstat -tuln | grep ':80'; then
-    echo "Nginx is now listening on port 80"
-else
-    echo "Failed to start Nginx on port 80"
-fi
+# Configure Nginx to listen on port 80
+sed -i 's/listen\s*80;/listen 80 default_server;/g' /etc/nginx/sites-available/default
+
+# Restart Nginx service
+systemctl restart nginx
