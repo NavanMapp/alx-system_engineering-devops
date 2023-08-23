@@ -4,14 +4,15 @@
 # as you were previously doing).
 
 # Define an Exec resource to fix the issue (replace with actual commands)
-file { '/path/to/apache/error.log':
-owner   => 'www-data',
-group   => 'www-data',
-mode    => '0644',
-require => Package['apache2'], # Ensure Apache is installed before applying this change
+file { '/etc/apache2/sites-available/000-default.conf':
+  ensure  => file,
+  content => template('module/000-default.conf.erb'),
+  require => Package['apache2'],
+  notify  => Service['apache2'],
 }
-service {
-'apache2':
-ensure => 'running',
 
+service { 'apache2':
+  ensure  => running,
+  enable  => true,
+  require => Package['apache2'],
 }
